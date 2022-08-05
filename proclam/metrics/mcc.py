@@ -5,6 +5,7 @@ A class for the Matthews correlation coefficient
 from __future__ import absolute_import
 
 from builtins import range
+
 __all__ = ["MCC"]
 
 import numpy as np
