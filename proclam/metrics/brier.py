@@ -49,7 +49,7 @@ class Brier(Metric):
 
         Notes
         -----
-        Uses the [original, multi-class Brier score](https://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier).
+        Uses the [original, multi-class Brier score](https://en.wikipedia.org/wiki/Brier_score#Original_definition_by_Brier).  # noqa E501
         """
         prediction, truth = np.asarray(prediction), np.asarray(truth)
         prediction_shape = np.shape(prediction)
