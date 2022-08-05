@@ -3,16 +3,17 @@ A subclass for a general classifier based on a perturbed confusion matrix
 """
 
 from __future__ import absolute_import
-__all__  = ['FromCM']
+
+__all__ = ["FromCM"]
 
 import numpy as np
 import scipy.stats as sps
 
 from .classifier import Classifier
 
-class FromCM(Classifier):
 
-    def __init__(self, scheme='CM', seed=0):
+class FromCM(Classifier):
+    def __init__(self, scheme="CM", seed=0):
         """
         An object that simulates predicted classifications from the truth values and and arbitrary confusion matrix.
 
@@ -54,9 +55,12 @@ class FromCM(Classifier):
 
         N = len(truth)
         M = len(cm)
-        if other: M += 1
+        if other:
+            M += 1
 
-        prediction = cm[truth] + delta * sps.halfcauchy.rvs(loc=0., scale=delta, size=(N, M))
+        prediction = cm[truth] + delta * sps.halfcauchy.rvs(
+            loc=0.0, scale=delta, size=(N, M)
+        )
         prediction /= np.sum(prediction, axis=1)[:, np.newaxis]
 
         return prediction

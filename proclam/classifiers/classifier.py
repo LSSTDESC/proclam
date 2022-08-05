@@ -3,12 +3,13 @@ A superclass for classifiers
 """
 
 from __future__ import absolute_import
-__all__ = ['Classifier']
+
+__all__ = ["Classifier"]
 
 import numpy as np
 
-class Classifier(object):
 
+class Classifier(object):
     def __init__(self, scheme=None, seed=0):
         """
         An object that simulates predicted classifications.
@@ -43,13 +44,14 @@ class Classifier(object):
             predicted classes
         """
 
-        print('No classification procedure specified: returning truth table')
+        print("No classification procedure specified: returning truth table")
 
         N = len(truth)
         indices = range(N)
-        if other: M += 1
+        if other:
+            M += 1
         prediction = np.zeros((N, M))
 
-        prediction[indices, truth[indices]] += 1.
+        prediction[indices, truth[indices]] += 1.0
 
         return prediction

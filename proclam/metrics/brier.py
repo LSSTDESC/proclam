@@ -3,7 +3,8 @@ A metric subclass for the Brier score
 """
 
 from __future__ import absolute_import
-__all__ = ['Brier']
+
+__all__ = ["Brier"]
 
 import numpy as np
 
@@ -13,8 +14,8 @@ from .util import det_to_prob as truth_reformatter
 from .util import averager
 from .metric import Metric
 
-class Brier(Metric):
 
+class Brier(Metric):
     def __init__(self, scheme=None):
         """
         An object representing the Brier score metric
@@ -27,7 +28,7 @@ class Brier(Metric):
 
         super(Brier, self).__init__(scheme)
 
-    def evaluate(self, prediction, truth, averaging='per_class'):
+    def evaluate(self, prediction, truth, averaging="per_class"):
         """
         Evaluates the Brier score
 
@@ -62,6 +63,6 @@ class Brier(Metric):
         class_brier = averager(q_each, truth, M)
         metric = weight_sum(class_brier, weight_vector=weights)
 
-        assert(~np.isnan(metric))
+        assert ~np.isnan(metric)
 
         return metric

@@ -3,7 +3,8 @@ A class for accuracy
 """
 
 from __future__ import absolute_import
-__all__ = ['Accuracy']
+
+__all__ = ["Accuracy"]
 
 import numpy as np
 
@@ -11,8 +12,8 @@ from .util import weight_sum, check_weights
 from .util import prob_to_det, det_to_cm, cm_to_rate
 from .metric import Metric
 
-class Accuracy(Metric):
 
+class Accuracy(Metric):
     def __init__(self, scheme=None):
         """
         An object that evaluates the accuracy
@@ -25,7 +26,7 @@ class Accuracy(Metric):
         super(Accuracy, self).__init__(scheme)
         self.scheme = scheme
 
-    def evaluate(self, prediction, truth, averaging='per_class'):
+    def evaluate(self, prediction, truth, averaging="per_class"):
         """
         Evaluates the accuracy
 

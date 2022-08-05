@@ -3,15 +3,16 @@ A subclass for a log-scaled unbalanced distribution of classes.
 """
 
 from __future__ import absolute_import
-__all__ = ['LogUnbalanced']
+
+__all__ = ["LogUnbalanced"]
 
 import numpy as np
 
 from .simulator import Simulator
 
-class LogUnbalanced(Simulator):
 
-    def __init__(self, scheme='log-unbalanced', seed=0):
+class LogUnbalanced(Simulator):
+    def __init__(self, scheme="log-unbalanced", seed=0):
         """
         An object that simulates unbalanced true class assignments such that the probability of an object being in class 'x' (with 0<=x<=M) is proportional to 2**y, where y is a draw from a uniform distribution U(0,M).
 
@@ -52,6 +53,6 @@ class LogUnbalanced(Simulator):
 
         truth = np.random.choice(M, size=N, p=prob_classes)
         if not len(np.sort(np.unique(truth))) == M:
-            print('warning: some classes not represented! try lowering base')
+            print("warning: some classes not represented! try lowering base")
 
         return truth

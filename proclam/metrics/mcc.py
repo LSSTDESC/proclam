@@ -3,7 +3,8 @@ A class for the Matthews correlation coefficient
 """
 
 from __future__ import absolute_import
-__all__ = ['MCC']
+
+__all__ = ["MCC"]
 
 import numpy as np
 
@@ -11,8 +12,8 @@ from .util import weight_sum, check_weights
 from .util import prob_to_det, det_to_cm, cm_to_rate
 from .metric import Metric
 
-class MCC(Metric):
 
+class MCC(Metric):
     def __init__(self, scheme=None):
         """
         An object that evaluates the Matthews correlation coefficient
@@ -25,7 +26,7 @@ class MCC(Metric):
         super(MCC, self).__init__(scheme)
         self.scheme = scheme
 
-    def evaluate(self, prediction, truth, averaging='per_class'):
+    def evaluate(self, prediction, truth, averaging="per_class"):
         """
         Evaluates the Matthews correlation coefficient
 
@@ -53,7 +54,9 @@ class MCC(Metric):
         mcc = np.empty(M)
         for m in range(M):
             if not len(np.where(truth == m)[0]):
-                raise RuntimeError('No true values for class %i so MCC is undefined'%m)
+                raise RuntimeError(
+                    "No true values for class %i so MCC is undefined" % m
+                )
             num = rates.TP[m] * rates.TN[m] - rates.FP[m] * rates.FN[m]
             A = rates.TP[m] + rates.FP[m]
             B = rates.TP[m] + rates.FN[m]

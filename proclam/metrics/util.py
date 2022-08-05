@@ -3,22 +3,33 @@ Utility functions for PLAsTiCC metrics
 """
 
 from __future__ import absolute_import, division
-__all__ = ['sanitize_predictions',
-           'weight_sum', 'check_weights', 'averager',
-           'cm_to_rate', 'precision',
-           'auc', 'check_auc_grid', 'prep_curve',
-           'det_to_prob', 'prob_to_det',
-           'det_to_cm']
+
+__all__ = [
+    "sanitize_predictions",
+    "weight_sum",
+    "check_weights",
+    "averager",
+    "cm_to_rate",
+    "precision",
+    "auc",
+    "check_auc_grid",
+    "prep_curve",
+    "det_to_prob",
+    "prob_to_det",
+    "det_to_cm",
+]
 
 import collections
 import numpy as np
+
 # import pycm
 import sys
 from scipy.integrate import trapz
 
-RateMatrix = collections.namedtuple('rates', 'TPR FPR FNR TNR TP FP FN TN')
+RateMatrix = collections.namedtuple("rates", "TPR FPR FNR TNR TP FP FN TN")
 
-def sanitize_predictions(predictions, epsilon=1.e-8):
+
+def sanitize_predictions(predictions, epsilon=1.0e-8):
     """
     Replaces 0 and 1 with 0+epsilon, 1-epsilon
 
@@ -34,14 +45,15 @@ def sanitize_predictions(predictions, epsilon=1.e-8):
     predictions: numpy.ndarray, float
         N*M matrix of probabilities per object, no 0 or 1 values
     """
-    assert epsilon > 0. and epsilon < 0.0005
-    mask1 = (predictions < epsilon)
-    mask2 = (predictions > 1.0 - epsilon)
+    assert epsilon > 0.0 and epsilon < 0.0005
+    mask1 = predictions < epsilon
+    mask2 = predictions > 1.0 - epsilon
 
     predictions[mask1] = epsilon
     predictions[mask2] = 1.0 - epsilon
     predictions = predictions / np.sum(predictions, axis=1)[:, np.newaxis]
     return predictions
+
 
 def weight_sum(per_class_metrics, weight_vector):
     """
@@ -61,6 +73,7 @@ def weight_sum(per_class_metrics, weight_vector):
     """
     weight_sum = np.dot(weight_vector, per_class_metrics)
     return weight_sum
+
 
 def check_weights(avg_info, M, chosen=None, truth=None):
     """
@@ -89,29 +102,30 @@ def check_weights(avg_info, M, chosen=None, truth=None):
     if type(avg_info) != str:
         avg_info = np.asarray(avg_info)
         weights = avg_info / np.sum(avg_info)
-        assert(np.isclose(sum(weights), 1.))
-    elif avg_info == 'per_class':
+        assert np.isclose(sum(weights), 1.0)
+    elif avg_info == "per_class":
         weights = np.ones(M) / float(M)
-    elif avg_info == 'per_item':
+    elif avg_info == "per_item":
         classes, counts = np.unique(truth, return_counts=True)
         weights = np.zeros(M)
         weights[classes] = counts / float(len(truth))
         assert len(weights) == M
-    elif avg_info == 'flat':
+    elif avg_info == "flat":
         weights = np.ones(M)
-    elif avg_info == 'up' or avg_info == 'down':
+    elif avg_info == "up" or avg_info == "down":
         if chosen is None:
             chosen = np.random.randint(M)
-        if avg_info == 'up':
+        if avg_info == "up":
             weights = np.ones(M) / np.float(M)
-            weights[chosen] = 1.
-        elif avg_info == 'down':
+            weights[chosen] = 1.0
+        elif avg_info == "down":
             weights = np.ones(M)
-            weights[chosen] = 1./np.float(M)
+            weights[chosen] = 1.0 / np.float(M)
     else:
-        print('something has gone wrong with avg_info '+str(avg_info))
+        print("something has gone wrong with avg_info " + str(avg_info))
         weights = None
     return weights
+
 
 def averager(per_object_metrics, truth, M, vb=False):
     """
@@ -127,14 +141,16 @@ def averager(per_object_metrics, truth, M, vb=False):
         true_indices = np.where(truth == m)[0]
         how_many_in_class = len(true_indices)
         try:
-            assert(how_many_in_class > 0)
+            assert how_many_in_class > 0
             per_class_metric = group_metric[true_indices]
             # assert(~np.all(np.isnan(per_class_metric)))
             class_metric[m] = np.average(per_class_metric)
         except AssertionError:
-            class_metric[m] = 0.
-        if vb: print('by request '+str((m, how_many_in_class, class_metric[m])))
+            class_metric[m] = 0.0
+        if vb:
+            print("by request " + str((m, how_many_in_class, class_metric[m])))
     return class_metric
+
 
 def cm_to_rate(cm, vb=False):
     """
@@ -185,6 +201,7 @@ def cm_to_rate(cm, vb=False):
 
     return rates
 
+
 def prep_curve(x, y):
     """
     Makes a curve for AUC
@@ -203,9 +220,14 @@ def prep_curve(x, y):
     y: numpy.ndarray, float
         y-axis
     """
-    x = np.concatenate(([0.], x, [1.]),)
-    y = np.concatenate(([0.], y, [1.]),)
+    x = np.concatenate(
+        ([0.0], x, [1.0]),
+    )
+    y = np.concatenate(
+        ([0.0], y, [1.0]),
+    )
     return (x, y)
+
 
 def auc(x, y):
     """
@@ -227,6 +249,7 @@ def auc(x, y):
     auc = trapz(y[i], x[i])
     return auc
 
+
 def check_auc_grid(grid):
     """
     Checks if a grid for an AUC metric is valid
@@ -244,21 +267,22 @@ def check_auc_grid(grid):
     if type(grid) == list or type(grid) == np.ndarray:
         thresholds_grid = np.concatenate((np.zeros(1), np.array(grid), np.ones(1)))
     elif type(grid) == float:
-        if grid > 0. and grid < 1.:
-            thresholds_grid = np.arange(0., 1., grid)
+        if grid > 0.0 and grid < 1.0:
+            thresholds_grid = np.arange(0.0, 1.0, grid)
         else:
             thresholds_grid = None
     elif type(grid) == int:
         if grid > 0:
-            thresholds_grid = np.linspace(0., 1., grid)
+            thresholds_grid = np.linspace(0.0, 1.0, grid)
         else:
             thresholds_grid = None
     try:
         assert thresholds_grid is not None
         return np.sort(thresholds_grid)
     except AssertionError:
-        print('Please specify a grid, spacing, or density for this AUC metric.')
+        print("Please specify a grid, spacing, or density for this AUC metric.")
         return
+
 
 def det_to_prob(dets, prediction=None):
     """
@@ -291,9 +315,10 @@ def det_to_prob(dets, prediction=None):
         prediction_shape = np.shape(prediction)
 
     probs = np.zeros(prediction_shape)
-    probs[indices, dets] = 1.
+    probs[indices, dets] = 1.0
 
     return probs
+
 
 def prob_to_det(probs, m=None, threshold=None):
     """
@@ -317,13 +342,23 @@ def prob_to_det(probs, m=None, threshold=None):
         dets = np.argmax(probs, axis=1)
     else:
         try:
-            assert(type(m) == int and type(threshold) == np.float64)
+            assert type(m) == int and type(threshold) == np.float64
         except AssertionError:
-            print(str(m)+' is '+str(type(m))+' and must be int; '+str(threshold)+' is '+str(type(threshold))+' and must be float')
+            print(
+                str(m)
+                + " is "
+                + str(type(m))
+                + " and must be int; "
+                + str(threshold)
+                + " is "
+                + str(type(threshold))
+                + " and must be float"
+            )
         dets = np.zeros(np.shape(probs)[0]).astype(int)
         dets[probs[:, m] >= threshold] = 1
 
     return dets
+
 
 def det_to_cm(dets, truth, per_class_norm=False, vb=False):
     """
@@ -360,7 +395,8 @@ def det_to_cm(dets, truth, per_class_norm=False, vb=False):
 
     coords = np.array(list(zip(dets, truth)))
     indices, index_counts = np.unique(coords, axis=0, return_counts=True)
-    if vb: print(indices.T, index_counts)
+    if vb:
+        print(indices.T, index_counts)
     index_counts = index_counts.astype(int)
     indices = indices.T.astype(int)
     cm[indices[0], indices[1]] = index_counts
@@ -368,9 +404,11 @@ def det_to_cm(dets, truth, per_class_norm=False, vb=False):
     if per_class_norm:
         cm = cm.astype(float) / true_counts[np.newaxis, :].astype(float)
 
-    if vb: print('by request '+str(cm))
+    if vb:
+        print("by request " + str(cm))
 
     return cm
+
 
 # def prob_to_cm(probs, truth, per_class_norm=True, vb=False):
 #     """
@@ -436,6 +474,7 @@ def det_to_cm(dets, truth, per_class_norm=False, vb=False):
 #     """
 #     return 1. - rates.FNR
 
+
 def precision(TP, FP):
     """
     Calculates precision from rates
@@ -454,8 +493,10 @@ def precision(TP, FP):
     """
     p = np.asarray(TP / (TP + FP))
     if np.any(np.isnan(p)):
-        p[np.isnan(p)] = 0.
+        p[np.isnan(p)] = 0.0
     return p
+
+
 #
 # def recall(classifications,truth,class_idx):
 #

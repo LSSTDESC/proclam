@@ -3,15 +3,16 @@ A superclass for metrics
 """
 
 from __future__ import absolute_import
-__all__ = ['Metric']
+
+__all__ = ["Metric"]
 
 import numpy as np
 
 from .util import weight_sum
 from .util import check_weights
 
-class Metric(object):
 
+class Metric(object):
     def __init__(self, scheme=None, **kwargs):
         """
         An object that evaluates a function of the true classes and class probabilities
@@ -43,11 +44,11 @@ class Metric(object):
             value of the metric
         """
 
-        print('No metric specified')
+        print("No metric specified")
         #
         # mode = np.argmax(prediction, axis=1)
         # metric = len(np.where(truth == mode))
         # N = len(mode)
         # metric /= float(N)
 
-        return # metric
+        return  # metric

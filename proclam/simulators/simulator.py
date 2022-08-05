@@ -3,12 +3,13 @@ A superclass for simulators
 """
 
 from __future__ import absolute_import
-__all__ = ['Simulator']
+
+__all__ = ["Simulator"]
 
 import numpy as np
 
-class Simulator(object):
 
+class Simulator(object):
     def __init__(self, scheme=None, seed=0):
         """
         An object that simulates true class assignments.
@@ -41,7 +42,7 @@ class Simulator(object):
             true classes
         """
 
-        print('No simulation procedure specified: returning zeros')
+        print("No simulation procedure specified: returning zeros")
 
         truth = np.zeros(N).astype(int)
 

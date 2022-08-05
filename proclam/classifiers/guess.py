@@ -3,15 +3,16 @@ A subclass for a randomly guessing classifier
 """
 
 from __future__ import absolute_import, division
-__all__ = ['Guess']
+
+__all__ = ["Guess"]
 
 import numpy as np
 
 from .classifier import Classifier
 
-class Guess(Classifier):
 
-    def __init__(self, scheme='guess', seed=0):
+class Guess(Classifier):
+    def __init__(self, scheme="guess", seed=0):
         """
         An object that simulates predicted classifications that are totally random guesses
 
@@ -46,7 +47,8 @@ class Guess(Classifier):
         """
 
         N = len(truth)
-        if other: M += 1
+        if other:
+            M += 1
         prediction = np.random.uniform(size=(N, M))
         prediction = prediction / np.sum(prediction, axis=1)[:, np.newaxis]
 

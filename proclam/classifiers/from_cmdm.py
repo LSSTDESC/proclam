@@ -3,16 +3,17 @@ A subclass for a general classifier based on a perturbed confusion matrix
 """
 
 from __future__ import absolute_import
-__all__  = ['FromCMDM']
+
+__all__ = ["FromCMDM"]
 
 import numpy as np
 import scipy.stats as sps
 
 from .classifier import Classifier
 
-class FromCMDM(Classifier):
 
-    def __init__(self, scheme='CMDM', seed=0):
+class FromCMDM(Classifier):
+    def __init__(self, scheme="CMDM", seed=0):
         """
         An object that simulates predicted classifications from the truth values and and arbitrary confusion matrix, according to the Dirichlet distribution
 
@@ -56,9 +57,9 @@ class FromCMDM(Classifier):
         N = len(truth)
         M = len(cm)
 
-        cm[cm == 0.] = 1.e-8
+        cm[cm == 0.0] = 1.0e-8
         alpha = cm / delta
-        prediction =  np.empty((N, M))
+        prediction = np.empty((N, M))
 
         for m in range(M):
             func_m = sps.dirichlet(alpha[m])
