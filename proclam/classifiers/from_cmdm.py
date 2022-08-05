@@ -4,6 +4,7 @@ A subclass for a general classifier based on a perturbed confusion matrix
 
 from __future__ import absolute_import
 
+from builtins import range
 __all__ = ["FromCMDM"]
 
 import numpy as np
