@@ -15,7 +15,8 @@ from .classifier import Classifier
 class FromCM(Classifier):
     def __init__(self, scheme="CM", seed=0):
         """
-        An object that simulates predicted classifications from the truth values and and arbitrary confusion matrix.
+        An object that simulates predicted classifications from the truth
+        values and and arbitrary confusion matrix.
 
         Parameters
         ----------
@@ -35,7 +36,8 @@ class FromCM(Classifier):
         Parameters
         ----------
         cm: numpy.ndarray, float
-            the confusion matrix, normalized to sum to 1 across rows. Its dimensions need to match the anticipated number of classes.
+            the confusion matrix, normalized to sum to 1 across rows. Its
+            dimensions need to match the anticipated number of classes.
         truth: numpy.ndarray, int
             array of the true classes of the items
         delta: float, optional

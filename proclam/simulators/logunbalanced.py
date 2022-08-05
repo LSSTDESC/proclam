@@ -15,7 +15,10 @@ from .simulator import Simulator
 class LogUnbalanced(Simulator):
     def __init__(self, scheme="log-unbalanced", seed=0):
         """
-        An object that simulates unbalanced true class assignments such that the probability of an object being in class 'x' (with 0<=x<=M) is proportional to 2**y, where y is a draw from a uniform distribution U(0,M).
+        An object that simulates unbalanced true class assignments such that
+        the probability of an object being in class 'x' (with 0<=x<=M) is
+        proportional to 2**y, where y is a draw from a uniform
+        distribution U(0,M).
 
         Parameters
         ----------
