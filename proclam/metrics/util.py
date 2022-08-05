@@ -27,8 +27,6 @@ __all__ = [
 import collections
 import numpy as np
 
-# import pycm
-import sys
 from scipy.integrate import trapz
 
 RateMatrix = collections.namedtuple("rates", "TPR FPR FNR TNR TP FP FN TN")
@@ -138,7 +136,9 @@ def averager(per_object_metrics, truth, M, vb=False):
 
     Notes
     -----
-    There is currently a kludge for when there are no true class members, causing an improvement when that class is upweighted due to increasing the weight of 0.
+    There is currently a kludge for when there are no true class members,
+    causing an improvement when that class is upweighted due to increasing
+    the weight of 0.
     """
     group_metric = per_object_metrics
     class_metric = np.empty(M)
@@ -308,7 +308,10 @@ def det_to_prob(dets, prediction=None):
     Notes
     -----
     formerly truth_reformatter
-    Does not yet handle number of classes in truth not matching number of classes in prediction, i.e. for having "other" class or secret classes not in training set.  The prediction keyword is a kludge to enable this but should be replaced.
+    Does not yet handle number of classes in truth not matching number of
+    classes in prediction, i.e. for having "other" class or secret classes not
+    in training set.  The prediction keyword is a kludge to enable this but
+    should be replaced.
     """
     N = len(dets)
     indices = list(range(N))
@@ -327,7 +330,8 @@ def det_to_prob(dets, prediction=None):
 
 def prob_to_det(probs, m=None, threshold=None):
     """
-    Converts probabilistic classifications to deterministic classifications by assigning the class with highest probability
+    Converts probabilistic classifications to deterministic classifications by
+    assigning the class with highest probability
 
     Parameters
     ----------
@@ -343,7 +347,7 @@ def prob_to_det(probs, m=None, threshold=None):
     dets: numpy.ndarray, int
         maximum probability classes
     """
-    if m == None and threshold == None:
+    if m is None and threshold is None:
         dets = np.argmax(probs, axis=1)
     else:
         try:
@@ -417,7 +421,8 @@ def det_to_cm(dets, truth, per_class_norm=False, vb=False):
 
 # def prob_to_cm(probs, truth, per_class_norm=True, vb=False):
 #     """
-#     Turns probabilistic classifications into confusion matrix by taking maximum probability as deterministic class
+#     Turns probabilistic classifications into confusion matrix by taking
+# maximum probability as deterministic class
 #
 #     Parameters
 #     ----------

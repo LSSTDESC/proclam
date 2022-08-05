@@ -7,7 +7,6 @@ from __future__ import absolute_import
 __all__ = ["LogLoss"]
 
 import numpy as np
-import sys
 
 from .util import weight_sum
 from .util import check_weights
