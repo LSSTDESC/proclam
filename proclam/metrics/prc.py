@@ -3,7 +3,11 @@ A class for the Precision-Recall Curve
 """
 
 from __future__ import absolute_import
-__all__ = ['PRC']
+from __future__ import print_function
+
+from builtins import range
+
+__all__ = ["PRC"]
 
 import numpy as np
 
@@ -12,8 +16,8 @@ from .util import prob_to_det, det_to_cm, cm_to_rate
 from .util import auc, check_auc_grid, precision
 from .metric import Metric
 
-class PRC(Metric):
 
+class PRC(Metric):
     def __init__(self, scheme=None):
         """
         An object that evaluates the PRC AUC
@@ -26,7 +30,7 @@ class PRC(Metric):
         super(PRC, self).__init__(scheme)
         self.scheme = scheme
 
-    def evaluate(self, prediction, truth, grid, averaging='per_class', vb=False):
+    def evaluate(self, prediction, truth, grid, averaging="per_class", vb=False):
         """
         Evaluates the area under the PRC
 
@@ -59,7 +63,9 @@ class PRC(Metric):
             m_truth = (truth == m).astype(int)
 
             if not len(np.where(truth == m)[0]):
-                raise RuntimeError('No true values for class %i so PRC is undefined'%m)
+                raise RuntimeError(
+                    "No true values for class %i so PRC is undefined" % m
+                )
 
             precisions, recalls = np.empty(n_thresholds), np.empty(n_thresholds)
             for i, t in enumerate(thresholds_grid):
@@ -72,11 +78,13 @@ class PRC(Metric):
             (curve[m][0], curve[m][1]) = (recalls, precisions)
             auc_class[m] = auc(recalls, precisions)
         if np.any(np.isnan(curve)):
-            print('Where did these NaNs come from?')
+            print("Where did these NaNs come from?")
             return curve
 
         weights = check_weights(averaging, M, truth=truth)
         auc_allclass = weight_sum(auc_class, weights)
 
-        if vb: return curve
-        else: return auc_allclass
+        if vb:
+            return curve
+        else:
+            return auc_allclass

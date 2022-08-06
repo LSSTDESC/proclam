@@ -3,10 +3,10 @@ A metric subclass for the log-loss
 """
 
 from __future__ import absolute_import
-__all__ = ['LogLoss']
+
+__all__ = ["LogLoss"]
 
 import numpy as np
-import sys
 
 from .util import weight_sum
 from .util import check_weights
@@ -15,8 +15,8 @@ from .util import sanitize_predictions
 from .util import averager
 from .metric import Metric
 
-class LogLoss(Metric):
 
+class LogLoss(Metric):
     def __init__(self, scheme=None):
         """
         An object that evaluates the log-loss metric
@@ -30,7 +30,7 @@ class LogLoss(Metric):
         super(LogLoss, self).__init__(scheme)
         self.scheme = scheme
 
-    def evaluate(self, prediction, truth, averaging='per_class'):
+    def evaluate(self, prediction, truth, averaging="per_class"):
         """
         Evaluates the log-loss
 
@@ -63,13 +63,13 @@ class LogLoss(Metric):
         prediction = sanitize_predictions(prediction)
 
         log_prob = np.log(prediction)
-        logloss_each = -1. * np.sum(truth_mask * log_prob, axis=1)[:, np.newaxis]
+        logloss_each = -1.0 * np.sum(truth_mask * log_prob, axis=1)[:, np.newaxis]
 
         # use a better structure for checking keyword support
         class_logloss = averager(logloss_each, truth, M)
 
         logloss = weight_sum(class_logloss, weight_vector=weights)
 
-        assert(~np.isnan(logloss))
+        assert ~np.isnan(logloss)
 
         return logloss
